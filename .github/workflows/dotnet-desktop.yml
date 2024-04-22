@@ -58,7 +58,8 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-        dotnet-architecture: x64
+      env:
+        PROCESSOR_ARCHITEW6432: x64
 
     # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
     - name: Add msbuild to PATH
@@ -67,11 +68,13 @@ jobs:
         msbuild-architecture: x64
     
     - name: Create the app package
-      run: msbuild /p:Configuration=Release
+      run: msbuild /p:Configuration=Release /p:Platform=x64
+      env:
+        PROCESSOR_ARCHITEW6432: x64
 
     # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
         name: MSIX Package
-        path: BypassReplacer\bin\Release\
+        path: BypassReplacer\bin\x64\Release\
