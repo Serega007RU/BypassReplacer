@@ -33,7 +33,7 @@ jobs:
     - name: Create the app package
       run: msbuild /p:Configuration=Release /p:Platform=x64
       env:
-        Version: ${{ steps.short-sha.outputs.sha }}
+        PROJECT_VERSION: ${{ steps.short-sha.outputs.sha }}
 
     # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
     - name: Upload build artifacts
