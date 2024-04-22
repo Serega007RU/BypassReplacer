@@ -57,8 +57,8 @@ jobs:
     - name: Install .NET Core
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.3
-        cache: false
+        dotnet-version: 8.0.x
+        dotnet-quality: 'preview'
       env:
         PROCESSOR_ARCHITEW6432: x64
 
