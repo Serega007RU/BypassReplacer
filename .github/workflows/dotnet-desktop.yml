@@ -66,11 +66,11 @@ jobs:
         msbuild-architecture: x64
     
     - name: Create the app package
-      run: msbuild /p:Configuration=Release /p:Platform=x64
+      run: msbuild /p:Configuration=Release
 
     # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
         name: MSIX Package
-        path: BypassReplacer\bin\x64\Release\
+        path: BypassReplacer\bin\Release\
