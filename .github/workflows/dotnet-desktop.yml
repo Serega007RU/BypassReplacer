@@ -68,7 +68,7 @@ jobs:
       uses: microsoft/setup-msbuild@v2
     
     - name: Create the app package
-      run: msbuild /p:Configuration=$env:Configuration /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle
+      run: msbuild /p:Configuration=$env:Configuration /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle /p:Platform=x64
       env:
         Appx_Bundle: Always
         Appx_Bundle_Platforms: x86|x64
