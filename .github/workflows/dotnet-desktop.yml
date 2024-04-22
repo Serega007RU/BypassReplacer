@@ -58,7 +58,6 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-        dotnet-quality: 'preview'
       env:
         PROCESSOR_ARCHITEW6432: x64
 
@@ -69,7 +68,7 @@ jobs:
         msbuild-architecture: x64
     
     - name: Create the app package
-      run: msbuild /p:Configuration=Release
+      run: msbuild /p:Configuration=Release /p:Platform=x64
       env:
         PROCESSOR_ARCHITEW6432: x64
 
