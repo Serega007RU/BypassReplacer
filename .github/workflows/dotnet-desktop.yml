@@ -31,7 +31,7 @@ jobs:
         msbuild-architecture: x64
     
     - name: Create the app package
-      run: msbuild /p:Configuration=Release;VersionAssembly=1.2.3.4 /p:Platform=x64
+      run: msbuild /p:Configuration=Release /p:Version=1.2.3.4 /p:Platform=x64
       env:
         PROJECT_VERSION: ${{ steps.short-sha.outputs.sha }}
 
