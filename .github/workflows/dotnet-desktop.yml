@@ -29,9 +29,14 @@ jobs:
       uses: microsoft/setup-msbuild@v2
       with:
         msbuild-architecture: x64
+
+    - name: Set version on AssemblyInfo.cs
+      uses: dannevesdantas/set-version-assemblyinfo-win@v1.0.0
+      with:
+        version: '3.2.0'
     
     - name: Create the app package
-      run: msbuild /p:Configuration=Release /p:Version=1.2.3.4 /p:Platform=x64
+      run: msbuild /p:Configuration=Release /p:Platform=x64
       env:
         PROJECT_VERSION: ${{ steps.short-sha.outputs.sha }}
 
