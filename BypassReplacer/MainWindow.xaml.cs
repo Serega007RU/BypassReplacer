@@ -136,7 +136,7 @@ namespace BypassReplacer
                             string path = p.MainModule.FileName;
 
                             // TODO лучше это смотреть в CommandLine но сделать это без WMI весьма сложно и не надёжно
-                            if (!path.Contains("23-jre-win-64\\bin")) continue;
+                            if (!path.Contains("24-jre-win-64\\bin")) continue;
 
                             //string cmdLine = GetCommandLine(p);
                             //if (!cmdLine.Contains("ru.cristalix")) continue;
