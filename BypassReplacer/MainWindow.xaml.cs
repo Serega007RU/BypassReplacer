@@ -248,16 +248,16 @@ namespace BypassReplacer
                     Console.WriteLine("Подмена 2...");
                     Dispatcher.Invoke(() => inform.Text = "Подмена 2...");
                     // TODO временно
-                    Thread.Sleep(1000);
+                    Thread.Sleep(100);
                     JavaProcess(currProcess, false);
                     if (multiProcess.Count > 0)
                     {
                         Console.WriteLine("Обнаружено что запущено несколько майнкрафтов (кристаликса), они будут заморожены на момент инжекта во избежания краша");
                         Dispatcher.Invoke(() => inform.Text += "\n\nОбнаружено что запущено несколько майнкрафтов (кристаликса), они будут заморожены на момент инжекта во избежания краша");
                     }
-                    //File.Delete(filePath);
-                    //File.Copy(tempFile, filePath, overwrite: true);
+                    File.Delete(filePath);
                     File.Copy(tempFile, filePath, overwrite: true);
+                    //File.Copy(tempFile, filePath, overwrite: true);
                     JavaProcess(currProcess, true);
                     foreach (Process p in multiProcess)
                     {
