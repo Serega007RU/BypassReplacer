@@ -212,8 +212,8 @@ namespace BypassReplacer
                         }
                     }
                     File.Delete(filePath);
-                    CreateSymbolicLink(filePath, "C:\\Xenoceal\\" + replaceName, SymbolicLink.File);
-                    //File.Copy("C:\\Xenoceal\\" + replaceName, filePath, overwrite: true);
+                    //CreateSymbolicLink(filePath, "C:\\Xenoceal\\" + replaceName, SymbolicLink.File);
+                    File.Copy("C:\\Xenoceal\\" + replaceName, filePath, overwrite: true);
                     JavaProcess(currProcess, true);
 
                     Console.WriteLine("Ждём запуска майнкрафта...");
@@ -253,9 +253,9 @@ namespace BypassReplacer
                         Console.WriteLine("Обнаружено что запущено несколько майнкрафтов (кристаликса), они будут заморожены на момент инжекта во избежания краша");
                         Dispatcher.Invoke(() => inform.Text += "\n\nОбнаружено что запущено несколько майнкрафтов (кристаликса), они будут заморожены на момент инжекта во избежания краша");
                     }
-                    File.Delete(filePath);
-                    File.Copy(tempFile, filePath, overwrite: true);
+                    //File.Delete(filePath);
                     //File.Copy(tempFile, filePath, overwrite: true);
+                    File.Copy(tempFile, filePath, overwrite: true);
                     JavaProcess(currProcess, true);
                     foreach (Process p in multiProcess)
                     {
