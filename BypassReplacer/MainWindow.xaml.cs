@@ -37,14 +37,6 @@ namespace BypassReplacer
         
         [DllImport("kernel32", CharSet = CharSet.Auto, SetLastError = true)] private static extern bool CloseHandle(IntPtr handle);
 
-        [DllImport("kernel32.dll")]
-        static extern bool CreateSymbolicLink(string lpSymlinkFileName, string lpTargetFileName, SymbolicLink dwFlags);
-        enum SymbolicLink
-        {
-            File = 0,
-            Directory = 1
-        }
-
         public MainWindow()
         {
             InitializeComponent();
@@ -59,64 +51,6 @@ namespace BypassReplacer
                 string filePathMinecraft = "";
                 string replacePath = "\\Minigames\\libraries\\";
                 string replaceName = "feder-live-SNAPSHOT.jar";
-
-                // TODO Serega007 всё это не используется так как это отжирает % ЦП, на моём 20-ти ядерном Xeon 5% WMI отжирал, но на каком-нибудь 2-х ядерном Atom это наверно будет очень больно
-                /*try
-                {
-                    string queryString =
-                    "SELECT TargetInstance FROM __InstanceCreationEvent " +
-                    "WITHIN 0.5 " +
-                    "WHERE TargetInstance ISA 'Win32_Process' " +
-                    "AND TargetInstance.Name = 'java.exe' " +
-                    "AND TargetInstance.CommandLine LIKE '%ru.cristalix%'" +
-                    // TODO Serega007 сомнительная фигня с HandleCount, но это сделано так как Cristalix при закрытии майнкрафта какого-то хрена на время создаёт ещё один процесс java.exe
-                    "AND TargetInstance.HandleCount != 0";
-
-                    // create the watcher and start to listen
-                    ManagementEventWatcher watcher = new ManagementEventWatcher(queryString);
-                    watcher.Options.Timeout = new TimeSpan(0, 5, 0);
-
-                    while (true)
-                    {
-                        // Block until the next event occurs
-                        // Note: this can be done in a loop if waiting for
-                        //        more than one occurrence
-                        ManagementBaseObject e = watcher.WaitForNextEvent();
-
-                        //Всякая debug фигня
-                        //Display information from the event
-                        Console.WriteLine(
-                            "Process {0} has been created, path is: {1}",
-                            ((ManagementBaseObject)e ["TargetInstance"])["Name"],
-                            ((ManagementBaseObject)e ["TargetInstance"])["ExecutablePath"]);
-
-                        // Отображает всё что есть в TargetInstance
-                        foreach (PropertyData property in ((ManagementBaseObject)e["TargetInstance"]).Properties)
-                        {
-                            Console.WriteLine(property.Name);
-
-                            Console.WriteLine(
-                                    ((ManagementBaseObject)e["TargetInstance"]).Properties[property.Name.ToString()].Value);
-                            Console.WriteLine();
-                        }
-
-                        watcher.Stop();
-                        break;
-                    }
-
-                    //watcher.EventArrived += new EventArrivedEventHandler(this.OnEventArrived);
-                    //watcher.Start();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("An error occurred: " + ex.Message);
-                }*/
-
-                if (!File.Exists("C:\\Xenoceal\\" + replaceName))
-                {
-                    Dispatcher.Invoke(() => inform.Text = "Ошибка: Не найден файл " + "C:\\Xenoceal\\" + replaceName + "\n\nПерезапустите BypassReplacer для повторной попытки");
-                    return;
-                }
 
                 Console.WriteLine("Запустите Cristalix...");
                 Dispatcher.Invoke(() => inform.Text = "Запустите Cristalix...");
@@ -170,26 +104,8 @@ namespace BypassReplacer
                 string tempPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "sunec_temp");
                 string tempFile = System.IO.Path.Combine(tempPath, replaceName);
 
-                Console.WriteLine("Проверка на вшивость...");
-                Dispatcher.Invoke(() => inform.Text = "Проверка на вшивость...");
-
-                if (!File.Exists("C:\\Xenoceal\\" + replaceName))
-                {
-                    Dispatcher.Invoke(() => inform.Text = "Ошибка: Не найден файл " + "C:\\Xenoceal\\" + replaceName + "\n\nПерезапустите BypassReplacer для повторной попытки");
-                    return;
-                }
-                if (IsSymbolicLink(filePath))
-                {
-                    File.Delete(filePath);
-                    Dispatcher.Invoke(() => inform.Text = "Ошибка: Похоже предыдущая попытка подмена была не успешной, перезапустите лаунчер (кристаликс) без BypassReplacer и попробуйте снова\n\nПерезапустите BypassReplacer для повторной попытки");
-                    return;
-                }
-
-                if (IsFileEqual("C:\\Xenoceal\\" + replaceName, filePath))
-                {
-                    Dispatcher.Invoke(() => inform.Text = "Ошибка: Похоже файл " + "C:\\Xenoceal\\" + replaceName + " был перезаписан лаунчером, верните модифиваронный " + replaceName + "\n\nПерезапустите BypassReplacer для повторной попытки");
-                    return;
-                }
+                Console.WriteLine("Подготовка...");
+                Dispatcher.Invoke(() => inform.Text = "Подготовка...");
 
                 try
                 {
@@ -212,8 +128,7 @@ namespace BypassReplacer
                         }
                     }
                     File.Delete(filePath);
-                    // CreateSymbolicLink(filePath, "C:\\Xenoceal\\" + replaceName, SymbolicLink.File);
-                    File.Copy("C:\\Xenoceal\\" + replaceName, filePath, overwrite: true);
+                    File.WriteAllBytes(filePath, Properties.Resources.feder_live_SNAPSHOT);
                     JavaProcess(currProcess, true);
 
                     Console.WriteLine("Ждём запуска майнкрафта...");
@@ -255,7 +170,6 @@ namespace BypassReplacer
                     }
                     File.Delete(filePath);
                     File.Copy(tempFile, filePath, overwrite: true);
-                    //File.Copy(tempFile, filePath, overwrite: true);
                     JavaProcess(currProcess, true);
                     foreach (Process p in multiProcess)
                     {
@@ -284,14 +198,6 @@ namespace BypassReplacer
                             {
                                 JavaProcess(p, true);
                             }
-                        }
-                    }
-                    catch { }
-                    try
-                    {
-                        if (IsSymbolicLink(filePath))
-                        {
-                            File.Delete(filePath);
                         }
                     }
                     catch { }
@@ -368,60 +274,5 @@ namespace BypassReplacer
                 }
             }
         }
-
-        // TODO Serega007 всё это не используется так как это отжирает % ЦП, на моём 20-ти ядерном Xeon 5% WMI отжирал, но на каком-нибудь 2-х ядерном Atom это наверно будет очень больно
-
-        // Define an extension method for type System.Process that returns the command 
-        // line via WMI.
-        /*private static string GetCommandLine(Process process)
-        {
-            string cmdLine = null;
-            using (var searcher = new ManagementObjectSearcher(
-              $"SELECT CommandLine FROM Win32_Process WHERE ProcessId = {process.Id}"))
-            {
-                // By definition, the query returns at most 1 match, because the process 
-                // is looked up by ID (which is unique by definition).
-                using (var matchEnum = searcher.Get().GetEnumerator())
-                {
-                    if (matchEnum.MoveNext()) // Move to the 1st item.
-                    {
-                        cmdLine = matchEnum.Current["CommandLine"]?.ToString();
-                    }
-                }
-            }
-            if (cmdLine == null)
-            {
-                // Not having found a command line implies 1 of 2 exceptions, which the
-                // WMI query masked:
-                // An "Access denied" exception due to lack of privileges.
-                // A "Cannot process request because the process (<pid>) has exited."
-                // exception due to the process having terminated.
-                // We provoke the same exception again simply by accessing process.MainModule.
-                var dummy = process.MainModule; // Provoke exception.
-            }
-            return cmdLine;
-        }*/
-
-        /*public static Process GetParent(Process process)
-        {
-            try
-            {
-                using (var query = new ManagementObjectSearcher(
-                  "SELECT * " +
-                  "FROM Win32_Process " +
-                  "WHERE ProcessId=" + process.Id))
-                {
-                    return query
-                      .Get()
-                      .OfType<ManagementObject>()
-                      .Select(p => Process.GetProcessById((int)(uint)p["ParentProcessId"]))
-                      .FirstOrDefault();
-                }
-            }
-            catch
-            {
-                return null;
-            }
-        }*/
     }
 }
