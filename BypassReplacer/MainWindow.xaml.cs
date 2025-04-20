@@ -247,6 +247,8 @@ namespace BypassReplacer
 
                     Console.WriteLine("Подмена 2...");
                     Dispatcher.Invoke(() => inform.Text = "Подмена 2...");
+                    // TODO временно
+                    Thread.Sleep(1000);
                     JavaProcess(currProcess, false);
                     if (multiProcess.Count > 0)
                     {
