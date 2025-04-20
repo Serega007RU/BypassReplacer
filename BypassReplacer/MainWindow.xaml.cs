@@ -57,8 +57,8 @@ namespace BypassReplacer
                 List<Process> multiProcess = new List<Process>();
                 string filePath = "";
                 string filePathMinecraft = "";
-                string replacePath = "\\Minigames\\";
-                string replaceName = "minecraft.jar";
+                string replacePath = "\\Minigames\\libraries\\";
+                string replaceName = "feder-live-SNAPSHOT.jar";
 
                 // TODO Serega007 всё это не используется так как это отжирает % ЦП, на моём 20-ти ядерном Xeon 5% WMI отжирал, но на каком-нибудь 2-х ядерном Atom это наверно будет очень больно
                 /*try
