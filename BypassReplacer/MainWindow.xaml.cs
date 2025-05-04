@@ -52,6 +52,12 @@ namespace BypassReplacer
                 string replacePath = "\\Minigames\\libraries\\";
                 string replaceName = "feder-live-SNAPSHOT.jar";
 
+                if (!File.Exists("C:\\Cristalix\\" + replaceName))
+                {
+                    Dispatcher.Invoke(() => inform.Text = "Ошибка: Не найден файл " + "C:\\Cristalix\\" + replaceName + "\n\nПерезапустите BypassReplacer для повторной попытки");
+                    return;
+                }
+
                 Console.WriteLine("Запустите Cristalix...");
                 Dispatcher.Invoke(() => inform.Text = "Запустите Cristalix...");
 
@@ -104,8 +110,26 @@ namespace BypassReplacer
                 string tempPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "sunec_temp");
                 string tempFile = System.IO.Path.Combine(tempPath, replaceName);
 
-                Console.WriteLine("Подготовка...");
-                Dispatcher.Invoke(() => inform.Text = "Подготовка...");
+                Console.WriteLine("Проверка на вшивость...");
+                Dispatcher.Invoke(() => inform.Text = "Проверка на вшивость...");
+
+                if (!File.Exists("C:\\Xenoceal\\" + replaceName))
+                {
+                    Dispatcher.Invoke(() => inform.Text = "Ошибка: Не найден файл " + "C:\\Xenoceal\\" + replaceName + "\n\nПерезапустите BypassReplacer для повторной попытки");
+                    return;
+                }
+                if (IsSymbolicLink(filePath))
+                {
+                    File.Delete(filePath);
+                    Dispatcher.Invoke(() => inform.Text = "Ошибка: Похоже предыдущая попытка подмена была не успешной, перезапустите лаунчер (кристаликс) без BypassReplacer и попробуйте снова\n\nПерезапустите BypassReplacer для повторной попытки");
+                    return;
+                }
+
+                if (IsFileEqual("C:\\Xenoceal\\" + replaceName, filePath))
+                {
+                    Dispatcher.Invoke(() => inform.Text = "Ошибка: Похоже файл " + "C:\\Xenoceal\\" + replaceName + " был перезаписан лаунчером, верните модифиваронный " + replaceName + "\n\nПерезапустите BypassReplacer для повторной попытки");
+                    return;
+                }
 
                 try
                 {
@@ -128,7 +152,7 @@ namespace BypassReplacer
                         }
                     }
                     File.Delete(filePath);
-                    File.WriteAllBytes(filePath, Properties.Resources.feder_live_SNAPSHOT);
+                    File.Copy("C:\\Xenoceal\\" + replaceName, filePath, overwrite: true);
                     JavaProcess(currProcess, true);
 
                     Console.WriteLine("Ждём запуска майнкрафта...");
@@ -170,6 +194,7 @@ namespace BypassReplacer
                     }
                     File.Delete(filePath);
                     File.Copy(tempFile, filePath, overwrite: true);
+                    //File.Copy(tempFile, filePath, overwrite: true);
                     JavaProcess(currProcess, true);
                     foreach (Process p in multiProcess)
                     {
