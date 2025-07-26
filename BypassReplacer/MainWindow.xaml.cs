@@ -113,9 +113,9 @@ namespace BypassReplacer
                 Console.WriteLine("Проверка на вшивость...");
                 Dispatcher.Invoke(() => inform.Text = "Проверка на вшивость...");
 
-                if (!File.Exists("C:\\Xenoceal\\" + replaceName))
+                if (!File.Exists("C:\\Cristalix\\" + replaceName))
                 {
-                    Dispatcher.Invoke(() => inform.Text = "Ошибка: Не найден файл " + "C:\\Xenoceal\\" + replaceName + "\n\nПерезапустите BypassReplacer для повторной попытки");
+                    Dispatcher.Invoke(() => inform.Text = "Ошибка: Не найден файл " + "C:\\Cristalix\\" + replaceName + "\n\nПерезапустите BypassReplacer для повторной попытки");
                     return;
                 }
                 if (IsSymbolicLink(filePath))
@@ -125,9 +125,9 @@ namespace BypassReplacer
                     return;
                 }
 
-                if (IsFileEqual("C:\\Xenoceal\\" + replaceName, filePath))
+                if (IsFileEqual("C:\\Cristalix\\" + replaceName, filePath))
                 {
-                    Dispatcher.Invoke(() => inform.Text = "Ошибка: Похоже файл " + "C:\\Xenoceal\\" + replaceName + " был перезаписан лаунчером, верните модифиваронный " + replaceName + "\n\nПерезапустите BypassReplacer для повторной попытки");
+                    Dispatcher.Invoke(() => inform.Text = "Ошибка: Похоже файл " + "C:\\Cristalix\\" + replaceName + " был перезаписан лаунчером, верните модифиваронный " + replaceName + "\n\nПерезапустите BypassReplacer для повторной попытки");
                     return;
                 }
 
@@ -152,7 +152,7 @@ namespace BypassReplacer
                         }
                     }
                     File.Delete(filePath);
-                    File.Copy("C:\\Xenoceal\\" + replaceName, filePath, overwrite: true);
+                    File.Copy("C:\\Cristalix\\" + replaceName, filePath, overwrite: true);
                     JavaProcess(currProcess, true);
 
                     Console.WriteLine("Ждём запуска майнкрафта...");
